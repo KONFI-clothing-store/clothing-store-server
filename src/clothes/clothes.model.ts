@@ -47,10 +47,10 @@ export class Clothes extends Model<Clothes> {
     description: 'Рейтинг одягу',
   })
   @Column({
-    type: DataType.STRING,
+    type: DataType.NUMBER,
     allowNull: false,
   })
-  rating: string;
+  rating: number;
 
   @ApiProperty({
     example: 'Футболка',

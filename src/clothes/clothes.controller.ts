@@ -10,7 +10,7 @@ export class ClothesController {
 
   @ApiOperation({ summary: 'Отримати 4 картки одягу' })
   @ApiResponse({ status: 200, type: [Clothes] })
-  @Get()
+  @Get('/all')
   getClothes(
     @Query('limit') limit: number = 4,
     @Query('offset') offset: number = 0,
@@ -21,12 +21,11 @@ export class ClothesController {
   @ApiOperation({ summary: 'Отримати 4 картки одягу по рейтингу' })
   @ApiResponse({ status: 200, type: [Clothes] })
   @Get('/rating')
-  getClothesByRating(
+  getClothesBySelling(
     @Query('limit') limit: number = 4,
     @Query('offset') offset: number = 0,
-    @Query('order') order: string = 'DESC',
   ) {
-    return this.clothesService.getClothesByRating(limit, offset, order);
+    return this.clothesService.getClothesBySelling(limit, offset);
   }
 
   @ApiOperation({ summary: 'Отримати 4 картки одягу по новизні' })

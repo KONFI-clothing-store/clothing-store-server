@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Clothes } from './clothes.model';
 import { InjectModel } from '@nestjs/sequelize';
+import { Op } from 'sequelize';
 
 @Injectable()
 export class ClothesService {
@@ -16,11 +17,15 @@ export class ClothesService {
     return clothes;
   }
 
-  async getClothesByRating(limit: number, offset: number, order?: string) {
+  async getClothesBySelling(limit: number, offset: number) {
     const clothes = await this.clothesRepository.findAll({
       limit,
       offset,
-      order: [['rating', order]],
+      where: {
+        rating: {
+          [Op.gte]: 4.5,
+        },
+      },
     });
     return clothes;
   }
@@ -29,7 +34,10 @@ export class ClothesService {
     const clothes = await this.clothesRepository.findAll({
       limit,
       offset,
-      order: [['createdAt', order]],
+      order: [
+        ['createdAt', order],
+        ['id', 'ASC'],
+      ],
     });
     return clothes;
   }
