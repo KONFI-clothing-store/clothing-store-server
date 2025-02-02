@@ -11,7 +11,9 @@ import {
 // import { diskStorage } from 'multer';
 import * as path from 'path';
 import { Response } from 'express';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Upload images')
 @Controller('/api/v1/files')
 export class UploadController {
   // Завантаження файлу
@@ -43,6 +45,7 @@ export class UploadController {
   //   }
 
   // Обслуговування статичних файлів
+  @ApiOperation({ summary: 'Отримати картинку одягу' })
   @Get('/:filename')
   getFile(@Param('filename') filename: string, @Res() res: Response) {
     const filePath = path.join(__dirname, '../../uploads', filename);

@@ -7,6 +7,8 @@ import { User } from './users/users.model';
 
 import { ClothesModule } from './clothes/clothes.module';
 import { Clothes } from './clothes/clothes.model';
+import { ClothesItemModule } from './clothes_item/clothes_item.module';
+import { CommentsModule } from './comments/comments.module';
 
 @Module({
   controllers: [],
@@ -27,6 +29,8 @@ import { Clothes } from './clothes/clothes.model';
     }),
     UsersModule,
     ClothesModule,
+    ClothesItemModule,
+    CommentsModule,
   ],
 })
 export class AppModule {}

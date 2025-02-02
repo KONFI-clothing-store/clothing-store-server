@@ -10,7 +10,7 @@ export class ClothesController {
 
   @ApiOperation({ summary: 'Отримати 4 картки одягу' })
   @ApiResponse({ status: 200, type: [Clothes] })
-  @Get('/all')
+  @Get('')
   getClothes(
     @Query('limit') limit: number = 4,
     @Query('offset') offset: number = 0,
@@ -37,5 +37,15 @@ export class ClothesController {
     @Query('order') order: string = 'DESC',
   ) {
     return this.clothesService.getClothesByLatest(limit, offset, order);
+  }
+
+  @ApiOperation({ summary: 'Отримати 4 картки одягу по типу' })
+  @ApiResponse({ status: 200, type: [Clothes] })
+  @Get('/type')
+  getClothesByType(
+    @Query('type') type: string,
+    @Query('limit') limit: number = 4,
+  ) {
+    return this.clothesService.getClothesByType(type, limit);
   }
 }

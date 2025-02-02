@@ -9,7 +9,7 @@ async function start() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
   app.enableCors({
-    origin: 'http://localhost:5173',
+    origin: '*',
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true,
   });
@@ -25,7 +25,7 @@ async function start() {
     .addTag('clothes')
     .build();
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('/api/v1/docs', app, document);
+  SwaggerModule.setup('/api-docs', app, document);
 
   await app.listen(PORT, () =>
     console.log(`

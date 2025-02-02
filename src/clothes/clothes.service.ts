@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { Clothes } from './clothes.model';
 import { InjectModel } from '@nestjs/sequelize';
 import { Op } from 'sequelize';
@@ -10,35 +10,73 @@ export class ClothesService {
   ) {}
 
   async getClothes(limit: number, offset: number) {
-    const clothes = await this.clothesRepository.findAll({
-      limit,
-      offset,
-    });
-    return clothes;
+    try {
+      const clothes = await this.clothesRepository.findAll({
+        limit,
+        offset,
+      });
+
+      return clothes;
+    } catch (err) {
+      console.log('Error fetching clothes:', err);
+
+      throw new InternalServerErrorException('Could not get clothes');
+    }
   }
 
   async getClothesBySelling(limit: number, offset: number) {
-    const clothes = await this.clothesRepository.findAll({
-      limit,
-      offset,
-      where: {
-        rating: {
-          [Op.gte]: 4.5,
+    try {
+      const clothes = await this.clothesRepository.findAll({
+        limit,
+        offset,
+        where: {
+          rating: {
+            [Op.gte]: 5.0,
+          },
         },
-      },
-    });
-    return clothes;
+      });
+
+      return clothes;
+    } catch (err) {
+      console.log('Error fetching clothes:', err);
+
+      throw new InternalServerErrorException('Could not get clothes by rating');
+    }
   }
 
   async getClothesByLatest(limit: number, offset: number, order?: string) {
-    const clothes = await this.clothesRepository.findAll({
-      limit,
-      offset,
-      order: [
-        ['createdAt', order],
-        ['id', 'ASC'],
-      ],
-    });
-    return clothes;
+    try {
+      const clothes = await this.clothesRepository.findAll({
+        limit,
+        offset,
+        order: [
+          ['createdAt', order],
+          ['id', 'ASC'],
+        ],
+      });
+
+      return clothes;
+    } catch (err) {
+      console.log('Error fetching clothes:', err);
+
+      throw new InternalServerErrorException('Could not get latest clothes');
+    }
+  }
+
+  async getClothesByType(type: string, limit: number) {
+    try {
+      const clothes = await this.clothesRepository.findAll({
+        limit,
+        where: {
+          type,
+        },
+      });
+
+      return clothes;
+    } catch (err) {
+      console.log('Error fetching clothes:', err);
+
+      throw new InternalServerErrorException('Could not get clothes by type');
+    }
   }
 }
