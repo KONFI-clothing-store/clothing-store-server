@@ -1,4 +1,4 @@
-import { Controller, Get, Query } from '@nestjs/common';
+import { Controller, Get, Query, Param } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { ClothesService } from './clothes.service';
 import { Clothes } from './clothes.model';
@@ -41,11 +41,8 @@ export class ClothesController {
 
   @ApiOperation({ summary: 'Отримати 4 картки одягу по типу' })
   @ApiResponse({ status: 200, type: [Clothes] })
-  @Get('/type')
-  getClothesByType(
-    @Query('type') type: string,
-    @Query('limit') limit: number = 4,
-  ) {
-    return this.clothesService.getClothesByType(type, limit);
+  @Get(':type')
+  getClothesByType(@Param('type') type: string) {
+    return this.clothesService.getClothesByType(type);
   }
 }

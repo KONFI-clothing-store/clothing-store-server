@@ -63,10 +63,10 @@ export class ClothesService {
     }
   }
 
-  async getClothesByType(type: string, limit: number) {
+  async getClothesByType(type: string) {
     try {
       const clothes = await this.clothesRepository.findAll({
-        limit,
+        limit: 9,
         where: {
           type,
         },

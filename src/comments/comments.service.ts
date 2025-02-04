@@ -24,10 +24,10 @@ export class CommentsService {
     }
   }
 
-  async getLatestComments(limit: number) {
+  async getLatestComments() {
     try {
       const comments = this.commentsRepository.findAll({
-        limit,
+        limit: 10,
         order: [
           ['createdAt', 'DESC'],
           ['id', 'ASC'],

@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Query } from '@nestjs/common';
+import { Controller, Get, Param } from '@nestjs/common';
 import { Comment } from './comments.model';
 import { CommentsService } from './comments.service';
 import { ApiResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
@@ -12,13 +12,14 @@ export class CommentsController {
   @ApiResponse({ status: 200, type: [Comment] })
   @Get(':id')
   getCommentsByClothesId(@Param('id') id: number) {
+    console.log('base url:', process.env.BASE_URL);
     return this.commentsService.getCommentsByClothesId(id);
   }
 
   @ApiOperation({ summary: 'Отримати останні записані коментарі' })
   @ApiResponse({ status: 200, type: [Comment] })
-  @Get('/latest')
-  getLatestComments(@Query('limit') id: number) {
-    return this.commentsService.getLatestComments(id);
+  @Get('')
+  getLatestComments() {
+    return this.commentsService.getLatestComments();
   }
 }
