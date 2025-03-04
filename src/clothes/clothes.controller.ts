@@ -11,11 +11,8 @@ export class ClothesController {
   @ApiOperation({ summary: 'Отримати 4 картки одягу' })
   @ApiResponse({ status: 200, type: [Clothes] })
   @Get('')
-  getClothes(
-    @Query('limit') limit: number = 4,
-    @Query('offset') offset: number = 0,
-  ) {
-    return this.clothesService.getClothes(limit, offset);
+  getClothes() {
+    return this.clothesService.getClothes();
   }
 
   @ApiOperation({ summary: 'Отримати 4 картки одягу по рейтингу' })
@@ -39,10 +36,18 @@ export class ClothesController {
     return this.clothesService.getClothesByLatest(limit, offset, order);
   }
 
-  @ApiOperation({ summary: 'Отримати 4 картки одягу по типу' })
+  @ApiOperation({ summary: 'Отримати картки одягу по типу' })
   @ApiResponse({ status: 200, type: [Clothes] })
-  @Get(':type')
+  @Get('/types/:type')
   getClothesByType(@Param('type') type: string) {
     return this.clothesService.getClothesByType(type);
+  }
+
+  @ApiOperation({ summary: 'Отримати дані при одяг' })
+  @ApiResponse({ status: 200, type: [Clothes] })
+  @Get(':id')
+  getClothesItemById(@Param('id') id: number) {
+    console.log('id:', id);
+    return this.clothesService.getClothById(id);
   }
 }

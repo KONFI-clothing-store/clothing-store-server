@@ -1,7 +1,9 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
-import { Clothes } from './clothes.model';
 import { InjectModel } from '@nestjs/sequelize';
 import { Op } from 'sequelize';
+
+import { Clothes } from './clothes.model';
+import { Comment } from 'src/comments/comments.model';
 
 @Injectable()
 export class ClothesService {
@@ -9,14 +11,19 @@ export class ClothesService {
     @InjectModel(Clothes) private clothesRepository: typeof Clothes,
   ) {}
 
-  async getClothes(limit: number, offset: number) {
-    try {
-      const clothes = await this.clothesRepository.findAll({
-        limit,
-        offset,
-      });
+  finalResultFormat(data: any, count: number) {
+    return {
+      data,
+      numberOfElements: count,
+    };
+  }
 
-      return clothes;
+  async getClothes() {
+    try {
+      const { count, rows: clothes } =
+        await this.clothesRepository.findAndCountAll();
+
+      return this.finalResultFormat(clothes, count);
     } catch (err) {
       console.log('Error fetching clothes:', err);
 
@@ -26,17 +33,18 @@ export class ClothesService {
 
   async getClothesBySelling(limit: number, offset: number) {
     try {
-      const clothes = await this.clothesRepository.findAll({
-        limit,
-        offset,
-        where: {
-          rating: {
-            [Op.gte]: 5.0,
+      const { count, rows: clothes } =
+        await this.clothesRepository.findAndCountAll({
+          limit,
+          offset,
+          where: {
+            rating: {
+              [Op.gte]: 4.5,
+            },
           },
-        },
-      });
+        });
 
-      return clothes;
+      return this.finalResultFormat(clothes, count);
     } catch (err) {
       console.log('Error fetching clothes:', err);
 
@@ -46,16 +54,17 @@ export class ClothesService {
 
   async getClothesByLatest(limit: number, offset: number, order?: string) {
     try {
-      const clothes = await this.clothesRepository.findAll({
-        limit,
-        offset,
-        order: [
-          ['createdAt', order],
-          ['id', 'ASC'],
-        ],
-      });
+      const { count, rows: clothes } =
+        await this.clothesRepository.findAndCountAll({
+          limit,
+          offset,
+          order: [
+            ['createdAt', order],
+            ['id', 'ASC'],
+          ],
+        });
 
-      return clothes;
+      return this.finalResultFormat(clothes, count);
     } catch (err) {
       console.log('Error fetching clothes:', err);
 
@@ -65,18 +74,39 @@ export class ClothesService {
 
   async getClothesByType(type: string) {
     try {
-      const clothes = await this.clothesRepository.findAll({
-        limit: 9,
-        where: {
-          type,
-        },
-      });
+      const { count, rows: clothes } =
+        await this.clothesRepository.findAndCountAll({
+          limit: 9,
+          where: {
+            type,
+          },
+        });
 
-      return clothes;
+      return this.finalResultFormat(clothes, count);
     } catch (err) {
       console.log('Error fetching clothes:', err);
 
       throw new InternalServerErrorException('Could not get clothes by type');
+    }
+  }
+
+  async getClothById(id: number) {
+    try {
+      const cloth = await this.clothesRepository.findOne({
+        where: {
+          id,
+        },
+        include: {
+          model: Comment,
+          required: false, // Для LEFT JOIN (якщо хочете всі записи, навіть без коментарів)
+        },
+      });
+
+      return cloth;
+    } catch (err) {
+      console.log('Error fetching clothes:', err);
+
+      throw new InternalServerErrorException('Could not get cloth by id');
     }
   }
 }

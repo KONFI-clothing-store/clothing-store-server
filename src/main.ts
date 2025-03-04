@@ -5,7 +5,7 @@ import * as path from 'path';
 import { NestExpressApplication } from '@nestjs/platform-express';
 
 async function start() {
-  const PORT = process.env.PORT || 8080;
+  const PORT = process.env.PORT;
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
   app.enableCors({

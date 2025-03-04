@@ -6,7 +6,7 @@ import {
   Table,
   BelongsTo,
 } from 'sequelize-typescript';
-import { ClothesItem } from 'src/clothes_item/clothes_item.model';
+import { Clothes } from 'src/clothes/clothes.model';
 
 @Table({ tableName: 'comments' })
 export class Comment extends Model<Comment> {
@@ -69,6 +69,6 @@ export class Comment extends Model<Comment> {
   })
   second_name: string;
 
-  @BelongsTo(() => ClothesItem, { foreignKey: 'clothes_item_id' })
-  clothes_item: ClothesItem;
+  @BelongsTo(() => Clothes, { foreignKey: 'clothes_item_id' })
+  clothes_item: Clothes;
 }

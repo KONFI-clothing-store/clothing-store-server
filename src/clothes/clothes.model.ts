@@ -1,7 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Column, DataType, Model, Table } from 'sequelize-typescript';
+import { Column, DataType, Model, Table, HasMany } from 'sequelize-typescript';
+import { Comment } from 'src/comments/comments.model';
 
-@Table({ tableName: 'clothes' })
+@Table({ tableName: 'clothes_items' })
 export class Clothes extends Model<Clothes> {
   @ApiProperty({ example: '1', description: 'Унікальний ідентифікатор' })
   @Column({
@@ -30,17 +31,17 @@ export class Clothes extends Model<Clothes> {
     type: DataType.STRING,
     allowNull: false,
   })
-  image_url: string;
+  images_url: string;
 
   @ApiProperty({
     example: '120',
     description: 'Ціна на одяг',
   })
   @Column({
-    type: DataType.STRING,
+    type: DataType.INTEGER,
     allowNull: false,
   })
-  price: string;
+  price: number;
 
   @ApiProperty({
     example: '4.5',
@@ -61,4 +62,28 @@ export class Clothes extends Model<Clothes> {
     allowNull: false,
   })
   type: string;
+
+  @ApiProperty({
+    example:
+      'This graphic t-shirt which is perfect for any occasion. Crafted from a soft and breathable fabric, it offers superior comfort and style.',
+    description: 'Опис одягу',
+  })
+  @Column({
+    type: DataType.STRING,
+    allowNull: false,
+  })
+  description: string;
+
+  @ApiProperty({
+    example: ['Small', 'Medium', 'Large', 'X-Large'],
+    description: 'Розмір одягу',
+  })
+  @Column({
+    type: DataType.STRING,
+    allowNull: false,
+  })
+  sizes: string[];
+
+  @HasMany(() => Comment, { foreignKey: 'clothes_item_id' })
+  comments: Comment[];
 }
