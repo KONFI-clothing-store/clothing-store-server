@@ -2,7 +2,7 @@ FROM node:alpine
 
 WORKDIR /app
 
-EXPOSE 8080
+EXPOSE 3004
 
 COPY package*.json ./
 
@@ -10,4 +10,4 @@ RUN npm install
 
 COPY . .
 
-CMD ["npm", "run", "dev"]
+CMD ["npm", "run", "start:prod"]
