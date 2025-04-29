@@ -3,7 +3,7 @@ import { InjectModel } from '@nestjs/sequelize';
 import { Op } from 'sequelize';
 
 import { Clothes } from './clothes.model';
-import { Comment } from 'src/comments/comments.model';
+import { Comment } from '../comments/comments.model';
 
 @Injectable()
 export class ClothesService {

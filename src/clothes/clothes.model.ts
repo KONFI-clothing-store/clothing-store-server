@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Column, DataType, Model, Table, HasMany } from 'sequelize-typescript';
-import { Comment } from 'src/comments/comments.model';
+import { Comment } from '../comments/comments.model';
 
 @Table({ tableName: 'clothes_items' })
 export class Clothes extends Model<Clothes> {
